@@ -1,0 +1,82 @@
+{
+  "note": "SYNTHETIC DEMONSTRATION DATA \u2014 NOT OFFICIAL INSTITUTIONAL DATA. Anomalies were injected on purpose for testing only.",
+  "injected": [
+    {
+      "indicator": "Mobile Money \u2013 Transaction Volume",
+      "area": "Kigali City",
+      "period": "2023-08-01",
+      "multiplier": 1.55,
+      "file": "digital_financial_activity_synthetic.csv"
+    },
+    {
+      "indicator": "Mobile Money \u2013 Transaction Value",
+      "area": "Kigali City",
+      "period": "2023-08-01",
+      "multiplier": 1.55,
+      "file": "digital_financial_activity_synthetic.csv"
+    },
+    {
+      "indicator": "Digital Payments \u2013 Transaction Volume",
+      "area": "Eastern Province",
+      "period": "2024-03-01",
+      "multiplier": 0.45,
+      "file": "digital_financial_activity_synthetic.csv"
+    },
+    {
+      "indicator": "Digital Payments \u2013 Transaction Value",
+      "area": "Eastern Province",
+      "period": "2024-03-01",
+      "multiplier": 0.45,
+      "file": "digital_financial_activity_synthetic.csv"
+    },
+    {
+      "indicator": "Mobile Banking \u2013 Transaction Value",
+      "area": "Western Province",
+      "period": "2022-11-01",
+      "multiplier": 1.7,
+      "file": "digital_financial_activity_synthetic.csv"
+    },
+    {
+      "indicator": "Mobile Money \u2013 Active Accounts",
+      "area": "Northern Province",
+      "period": "2021-06-01",
+      "multiplier": 0.7,
+      "file": "digital_financial_activity_synthetic.csv"
+    },
+    {
+      "indicator": "Digital Payments \u2013 Transaction Volume",
+      "area": "Kigali City",
+      "period": "2025-04-01",
+      "multiplier": 1.8,
+      "file": "upload_demo_2025_extension.csv"
+    },
+    {
+      "indicator": "Digital Payments \u2013 Transaction Value",
+      "area": "Kigali City",
+      "period": "2025-04-01",
+      "multiplier": 1.8,
+      "file": "upload_demo_2025_extension.csv"
+    },
+    {
+      "indicator": "Mobile Money \u2013 Transaction Volume",
+      "area": "Southern Province",
+      "period": "2025-05-01",
+      "multiplier": 0.5,
+      "file": "upload_demo_2025_extension.csv"
+    },
+    {
+      "indicator": "Mobile Money \u2013 Transaction Value",
+      "area": "Southern Province",
+      "period": "2025-05-01",
+      "multiplier": 0.5,
+      "file": "upload_demo_2025_extension.csv"
+    },
+    {
+      "indicator": "Mobile Internet Subscriptions",
+      "area": "Northern Province",
+      "period": "2022-01-01",
+      "multiplier": 1.5,
+      "file": "connectivity_inclusion_synthetic.csv"
+    }
+  ]
+}
