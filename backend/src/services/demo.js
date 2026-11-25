@@ -94,9 +94,26 @@ async function loadDemo({ baseUrl, password, log = () => {} }) {
   await analyst.login('analyst@demo.local', password);
 
   log('Registering data sources...');
-  const sourceIds = {};
-  for (const s of SOURCES) sourceIds[s.name] = (await analyst.post('/api/data-sources', s)).id;
-  const synthSourceId = sourceIds['Synthetic demonstration generator'];
+
+const sourceIds = {};
+const existingSources = await analyst.get('/api/data-sources');
+
+for (const s of SOURCES) {
+  const existing = existingSources.find(
+    (source) => source.name === s.name
+  );
+
+  if (existing) {
+    sourceIds[s.name] = existing.id;
+    log(`  Reusing existing source: ${s.name}`);
+  } else {
+    const created = await analyst.post('/api/data-sources', s);
+    sourceIds[s.name] = created.id;
+    log(`  Created new source: ${s.name}`);
+  }
+}
+
+const synthSourceId = sourceIds['Synthetic demonstration generator'];
 
   for (const item of PRELOAD) {
     log(`Uploading and processing ${item.file}...`);
