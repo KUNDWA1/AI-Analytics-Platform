@@ -8,7 +8,12 @@ types.setTypeParser(1082, (v) => v);
 
 let pool;
 function getPool() {
-  if (!pool) pool = new Pool({ connectionString: config.databaseUrl, max: 10 });
+  if (!pool) pool = new Pool({
+    connectionString: config.databaseUrl,
+    max: 10,
+    // Set PGSSL=true when connecting to a managed database over its external URL.
+    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : undefined,
+  });
   return pool;
 }
 

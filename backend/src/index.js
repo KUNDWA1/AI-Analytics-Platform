@@ -2,12 +2,26 @@ const { config, assertConfig } = require('./config');
 const { initDb } = require('./scripts/initDb');
 const { createApp } = require('./app');
 
+// Optional first-boot demo load (hosted deployments without a shell). Enabled with BOOTSTRAP_DEMO=true.
+// Runs once: skipped if any dataset already exists. Never resets existing data.
+async function bootstrapDemo() {
+  if (process.env.BOOTSTRAP_DEMO !== 'true') return;
+  if (!config.demoPassword) { console.warn('BOOTSTRAP_DEMO is true but DEMO_PASSWORD is not set; skipping.'); return; }
+  const db = require('./db');
+  const demo = require('./services/demo');
+  const n = (await db.query('SELECT count(*)::int AS n FROM datasets')).rows[0].n;
+  if (n > 0) { await demo.ensureDemoUsers(config.demoPassword); console.log('Demo bootstrap: data exists, nothing to load.'); return; }
+  const summary = await demo.loadDemo({ baseUrl: `http://127.0.0.1:${config.port}`, password: config.demoPassword, log: console.log });
+  console.log('Demo bootstrap complete:', JSON.stringify(summary));
+}
+
 async function main() {
   assertConfig();
   await initDb(); // idempotent: creates tables/views and loads roles + permissions
   const app = createApp();
-  app.listen(config.port, () => {
-    console.log(`AI Analytics Platform API listening on http://localhost:${config.port}`);
+  app.listen(config.port, '0.0.0.0', () => {
+    console.log(`AI Analytics Platform API listening on port ${config.port}`);
+    bootstrapDemo().catch((e) => console.error('Demo bootstrap failed:', e.message));
   });
 }
 
