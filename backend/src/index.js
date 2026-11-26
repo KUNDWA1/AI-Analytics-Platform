@@ -9,8 +9,12 @@ async function bootstrapDemo() {
   if (!config.demoPassword) { console.warn('BOOTSTRAP_DEMO is true but DEMO_PASSWORD is not set; skipping.'); return; }
   const db = require('./db');
   const demo = require('./services/demo');
-  const n = (await db.query('SELECT count(*)::int AS n FROM datasets')).rows[0].n;
-  if (n > 0) { await demo.ensureDemoUsers(config.demoPassword); console.log('Demo bootstrap: data exists, nothing to load.'); return; }
+  // Skip only when processed data already exists. Datasets with no processed observations are a failed
+  // earlier load: rebuild the analytical data (users, roles and the audit trail are kept).
+  const n = (await db.query('SELECT count(*)::int AS n FROM observations')).rows[0].n;
+  if (n > 0) { await demo.ensureDemoUsers(config.demoPassword); console.log('Demo bootstrap: processed data exists, nothing to load.'); return; }
+  console.log('Demo bootstrap: no processed data found, loading demo data...');
+  await demo.resetData();
   const summary = await demo.loadDemo({ baseUrl: `http://127.0.0.1:${config.port}`, password: config.demoPassword, log: console.log });
   console.log('Demo bootstrap complete:', JSON.stringify(summary));
 }
