@@ -11,7 +11,7 @@ async function bootstrapDemo() {
   const demo = require('./services/demo');
   // Skip only when processed data already exists. Datasets with no processed observations are a failed
   // earlier load: rebuild the analytical data (users, roles and the audit trail are kept).
-  const n = (await db.query('SELECT count(*)::int AS n FROM observations')).rows[0].n;
+  const n = (await db.query('SELECT count(*)::int AS n FROM effective_observations')).rows[0].n;
   if (n > 0) { await demo.ensureDemoUsers(config.demoPassword); console.log('Demo bootstrap: processed data exists, nothing to load.'); return; }
   console.log('Demo bootstrap: no processed data found, loading demo data...');
   await demo.resetData();
