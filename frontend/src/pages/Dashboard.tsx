@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { DASH, useAuth } from '../auth';
 import { Badge, Card, Empty, ErrorBox, Field, PageHeader, SeverityBadge, Spinner, StatusBadge, SyntheticBanner, Table, useGet } from '../components/ui';
 import { MultiLine, SimpleBars, Sparkline } from '../components/charts';
+import { ProvinceMap } from '../components/ProvinceMap';
 import { cap, compact, dateTime, monthLabel, num, pct } from '../format';
 
 const TITLES: Record<string, [string, string]> = {
@@ -32,7 +33,7 @@ function Kpi({ k }: { k: any }) {
 }
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, can } = useAuth();
   const role = DASH[user!.role];
   const [f, setF] = useState({ from: '', to: '', category: '', area: '', source: '' });
   const opts = useGet<any>('/dashboard/filters');
@@ -106,6 +107,7 @@ export default function Dashboard() {
               subtitle={d.charts.regional?.window ? `Transaction volume, ${monthLabel(d.charts.regional.window[0])} – ${monthLabel(d.charts.regional.window[1])}` : 'Transaction volume by region'}>
               {d.charts.regional?.rows?.length ? (
                 <>
+                  <ProvinceMap rows={d.charts.regional.rows} />
                   <SimpleBars rows={d.charts.regional.rows} x="area" keys={['volume']} layout="horizontal" height={220} />
                   <Table head={['Region', 'Share', 'Growth (vs prior period)']}>
                     {d.charts.regional.rows.map((r: any) => (
@@ -134,7 +136,7 @@ export default function Dashboard() {
             </Card>
 
             <div className="space-y-5">
-              {d.anomalies && (
+              {d.anomalies && can('alerts.view') && (
                 <Card title="Unusual activity detected" subtitle="Statistical patterns requiring further investigation"
                   actions={<Link className="text-sm font-medium text-brand-700 hover:underline" to="/anomalies">View all</Link>}>
                   <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
